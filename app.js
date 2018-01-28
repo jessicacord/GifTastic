@@ -1,17 +1,17 @@
 //Create preset of buttons
-var animals = ["cat", "dog", "bunny"];
+var tvShows = ["The Office", "Friends", "Seinfield", "Full House", "Family Matters"];
 
 //Function to create buttons from array
 var createButtons = function() {
 
     $("#buttons").html("");
 
-    animals.forEach(function(animal) {
+    tvShows.forEach(function(tvShow) {
         
         var newButton = $("<button>");
-        newButton.attr("data-gif", animal)
-                .addClass("gif-button")
-                .text(animal);
+        newButton.attr("data-gif", tvShow)
+                .addClass("gif-button btn btn-default")
+                .text(tvShow);
         
         $("#buttons").append(newButton);
 
@@ -30,7 +30,7 @@ $("#add-button").on("click", function(){
 
     $("#new-button").val("");
 
-    animals.push(addButton);
+    tvShows.push(addButton);
     createButtons();
 
     
@@ -42,7 +42,7 @@ $("#add-button").on("click", function(){
 
 $(document.body).on("click", ".gif-button", function(){
     var tag = $(this).attr("data-gif");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=0UeIhgVaDyxfRXnlriyJthFl1CFq93h5&q=" + tag + "&limit=10&rating=pg";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=0UeIhgVaDyxfRXnlriyJthFl1CFq93h5&q=" + tag + "&limit=10&rating=pg&limit=20";
 
     $.ajax({
         url: queryURL,
@@ -59,14 +59,18 @@ $(document.body).on("click", ".gif-button", function(){
             var gifURLStill = result.images.fixed_height_still.url;
             // console.log(gifURL);
 
-            var gif = $("<img>");
-            gif.attr("data-image-still", gifURLStill)
+            var gif = $("<div>").addClass("gif-container col-md-4");
+
+            var gifImage = $("<img>");
+            gifImage.attr("data-image-still", gifURLStill)
                 .attr("data-image-animate", gifURL)
                 .attr("data-state", "still")
                 .attr("src", gifURLStill)
                 .addClass("giphy");
             
-            // var ratingText = $("<p>").text("Rating " + rating);
+            var ratingText = $("<p>").text("Rating " + rating);
+
+            gif.append(gifImage).append(ratingText);
 
             $("#gifs").append(gif);
         })
